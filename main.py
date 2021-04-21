@@ -1,21 +1,13 @@
 from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
-@app.route('/')
+
+@app.route('/',methods=['POST','GET'])
 def home():
-    return render_template('index.html')
-
-@app.route('/chat', methods=['POST','GET'])
-def hasil():
-    # #click submit, get the data
     if request.method == "POST":
-        chattext = request.form['chattext']
-        return f"<h1>{chattext}</h1>" 
+        #chattext = request.form['chattext']
+        return redirect(url_for('static', filename='style.css'))
     else:
-        return render_template('chat.html')
-
-@app.route('/<usr>')
-def user(usr):
-    return f"<h1>{usr}</h1>"
+        return render_template('index.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

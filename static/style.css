@@ -1,0 +1,113 @@
+/*website background dkk*/
+body {
+  background-color: #102552;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/*chatroom setting*/
+.container {
+  margin: 60px auto;
+  background: #fff;
+  padding: 0;
+  border-radius: 7px;
+}
+
+/*Profile bot ganyu*/
+.ganyu-bot-image {
+  height: 250px;
+  width: 250px;
+  cursor: pointer;
+  border-radius: 250px;
+  margin: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  margin-right: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*
+Bagian chat room
+*/
+input {
+  border: none;
+  border-radius: 30px;
+  width: 90%;
+}
+input::placeholder {
+  color: #e3e3e3;
+  font-weight: 300;
+  margin-left: 20px;
+}
+input:focus {
+  outline: none;
+}
+
+.chat-bubble {
+  padding: 10px 14px;
+  background: #eee;
+  margin: 10px 30px;
+  border-radius: 9px;
+  position: relative;
+  animation: fadeIn 1s ease-in;
+}
+.chat-bubble:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-bottom: 0;
+  margin-top: -10px;
+}
+.chat-bubble--left:after {
+  left: 0;
+  border-right-color: #eee;
+  border-left: 0;
+  margin-left: -20px;
+}
+.chat-bubble--right:after {
+  right: 0;
+  border-left-color: #212529;
+  border-right: 0;
+  margin-right: -20px;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.offset-md-9 .chat-bubble {
+  background: #212529;
+  color: #fff;
+}
+
+/*Input text dari user*/
+.chat-box-tray {
+  background: #eee;
+  display: flex;
+  align-items: baseline;
+  padding: 10px 15px;
+  align-items: center;
+  margin-top: 19px;
+  bottom: 0;
+}
+.chat-box-tray input[type=text] {
+  margin: 0 10px;
+  padding: 6px 2px;
+}
+
+input[type=submit] {
+  margin-right: 20px;
+  margin-left: 20px;
+  width: 70px;
+  height: 20px;
+}
