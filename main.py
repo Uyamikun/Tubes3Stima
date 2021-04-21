@@ -4,8 +4,11 @@ app = Flask(__name__)
 @app.route('/',methods=['POST','GET'])
 def home():
     if request.method == "POST":
-        #chattext = request.form['chattext']
-        return redirect(url_for('static', filename='style.css'))
+        chattext = request.form['chatform']
+        if(chattext == ""):
+            return render_template('index.html')
+        else:
+            return render_template('index.html', chat=chattext)
     else:
         return render_template('index.html')
 

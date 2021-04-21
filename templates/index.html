@@ -2,7 +2,7 @@
 <html lang="en" >
 <head>
   <meta charset="UTF-8">
-  <title>CodePen - A Pen by asdasdasdasasas</title>
+  <title>Ganyu Bot</title>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/material-design-icons/3.0.2/iconfont/material-icons.min.css'><link rel="stylesheet" href="./static/style.css">
 </head>
@@ -17,61 +17,29 @@
         <!-- Sebelah kiri (chat room)/chatbox-->
         <div class="col-md-8 border-right">
             <div class="chat-panel">
-                <div class="row no-gutters">
-                  <div class="col-md-3">
-                    <div class="chat-bubble chat-bubble--left">
-                      Hello dude!
-                    </div>
+              <div class="row no-gutters">
+                <div class="col-md-3 offset-md-9">
+                  <div class="chat-bubble chat-bubble--right">
+                    {{chat}}
                   </div>
                 </div>
-                <div class="row no-gutters">
-                  <div class="col-md-3 offset-md-9">
-                    <div class="chat-bubble chat-bubble--right">
-                      Hello dude!
-                    </div>
+              </div>
+              <div class="row no-gutters">
+                <div class="col-md-3">
+                  <div class="chat-bubble chat-bubble--left">
+                    test
                   </div>
                 </div>
-                <div class="row no-gutters">
-                  <div class="col-md-3 offset-md-9">
-                    <div class="chat-bubble chat-bubble--right">
-                      Hello dude!
-                    </div>
-                  </div>
-                </div>
-                <div class="row no-gutters">
-                  <div class="col-md-3">
-                    <div class="chat-bubble chat-bubble--left">
-                      Hello dude!
-                    </div>
-                  </div>
-                </div>
-                <div class="row no-gutters">
-                  <div class="col-md-3">
-                    <div class="chat-bubble chat-bubble--left">
-                      Hello dude!
-                    </div>
-                  </div>
-                </div>
-                <div class="row no-gutters">
-                  <div class="col-md-3">
-                    <div class="chat-bubble chat-bubble--left">
-                      Hello dude!
-                    </div>
-                  </div>
-                </div>
-                <div class="row no-gutters">
-                  <div class="col-md-3 offset-md-9">
-                    <div class="chat-bubble chat-bubble--right">
-                      Hello dude!
-                    </div>
-                  </div>
-                </div>
+              </div>
                 <div class="row">
                   <div class="col-12">
-                    <div class="chat-box-tray">
-                      <input type="text" placeholder="Type your message here...">
-                      <input type="submit">
-                    </div>
+                    <form method="post">
+                      <div class="chat-box-tray" method="post">
+                        <input type="text" placeholder="Type your message here..."  name ="chatform">
+                        <input class= "chatbutton" type="submit" id = "chatcontent">
+                      </div>
+                    </form>
+                    
                   </div>
                 </div>
               </div>
