@@ -42,6 +42,14 @@ pip3 install Flask
 
 Add additional notes about how to deploy this on a live system
 
+```
+pip install virtualenv
+virtualenv env
+.\env\Scripts\activate
+pip install flask
+python main.py
+```
+
 ## Built With
 
 * [Flask](https://flask.palletsprojects.com/en/1.1.x/) - The web framework used
