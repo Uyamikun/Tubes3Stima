@@ -1,16 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for
 app = Flask(__name__)
 
-@app.route('/',methods=['POST','GET'])
+userChat = ["pertama"]
+botChat = ["balesan pertama"]
+i = 0
+
+@app.route('/')
 def home():
-    if request.method == "POST":
-        chattext = request.form['chatform']
-        if(chattext == ""):
-            return render_template('index.html')
-        else:
-            return render_template('index.html', chat=chattext)
-    else:
-        return render_template('index.html')
+    return render_template('index.html', userChat=userChat, botChat = botChat)
+
+@app.route('/',methods=['POST'])
+def chatBot():
+    userChat.append(request.form['chatform'])
+    botChat.append("bales 1")
+    print(userChat)
+    print(botChat)
+    return render_template('index.html', userChat=userChat, botChat = botChat)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
