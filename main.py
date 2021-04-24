@@ -12,17 +12,40 @@ def balesanBot(s):
     if(re.search("masuk", s) != None):
         return "Jadwal telah dimasukkan"
     else:
-        return cekTanggal(s)
+        return cekContoh(s)
 
 def cekTanggal(s):
-    regextanggal = ^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$
+    regextanggal = "(([0-2][0-9]|30|31)/([0][0-9]|10|11|12)/([0-9]{4}|[0-9]{2}))"
+    regextanggalHuruf = "(([0-2][0-9]|30|31)(([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember)([0-9]{2}|[0-9]{4}))"
+
     x = re.findall(regextanggal, s)
     print(x)
     if(len(x) == 1):
+        return x[0][0]
+    else:
+        x = re.findall(regextanggalHuruf, s)
+        print(x)
+        if(len(x)==1):
+            return x[0][0]
+        else:
+            return "gak"
+
+def cekContoh(s):
+    regex1 = "([0-2][0-9]|30|31)"
+    regex2 = "(([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember)"
+    regex3 = "([0-9]{2}|[0-9]{4})"
+    x = re.findall(regex1, s)
+    y = re.findall(regex2, s)
+    z = re.findall(regex3, s)
+    print(x,y,z)
+    if(len(x)==1):
         return x[0]
+    elif(len(y)==1):
+        return y[0][0]
+    elif(len(z)==1):
+        return z[0]
     else:
         return "gak"
-
 def cekMatakuliah(s):
     #ambil input cek input di listMatakuliah
     regexmatkul = "IF2222"
