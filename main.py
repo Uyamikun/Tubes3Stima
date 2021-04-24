@@ -12,11 +12,11 @@ def balesanBot(s):
     if(re.search("masuk", s) != None):
         return "Jadwal telah dimasukkan"
     else:
-        return cekContoh(s)
+        return cekTanggal(s)
 
 def cekTanggal(s):
     regextanggal = "(([0-2][0-9]|30|31)/([0][0-9]|10|11|12)/([0-9]{4}|[0-9]{2}))"
-    regextanggalHuruf = "(([0-2][0-9]|30|31)(([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember)([0-9]{2}|[0-9]{4}))"
+    regextanggalHuruf = "(([0-2][0-9]|30|31))(([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember([0-9]{2}|[0-9]{4}))"
 
     x = re.findall(regextanggal, s)
     print(x)
