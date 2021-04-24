@@ -12,8 +12,12 @@ body {
   background: #fff;
   padding: 0;
   border-radius: 7px;
+  height: 700px;
+  
 }
+/* .col-md-8{
 
+} */
 /*Profile bot ganyu*/
 .ganyu-bot-image {
   height: 250px;
@@ -52,7 +56,6 @@ input:focus {
   margin: 10px 30px;
   border-radius: 9px;
   position: relative;
-  display: inline-block;
 }
 .chat-bubble:after {
   content: "";
@@ -119,6 +122,13 @@ padding-right: 15px; */
   align-items: center;
   margin-top: 19px;
   bottom: 0;
+  align-self: flex-end;
+  
+}
+
+.chat-panel{
+  height: 700px;
+  overflow: auto;
 }
 .chat-box-tray .form-control{
   background: #eee;
@@ -135,6 +145,7 @@ padding-right: 15px; */
   margin: 0 10px;
   padding: 6px 2px;
 }
+
 
 .sticky{
   position: sticky;
