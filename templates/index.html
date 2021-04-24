@@ -11,7 +11,7 @@
 <div class="container">
 	<div class="row no-gutters">
         <!-- Sebelah kanan (profile bot)-->
-        <div class="col-md-4 border-right">
+        <div style="position: sticky; top: 0;">
             <img class="ganyu-bot-image" src="https://upload-os-bbs.hoyolab.com/upload/2021/01/06/5481824/171904fd00cc4d8a7bfdb918021bfdfa_1069856773048174498.png?x-oss-process=image/auto-orient,0/interlace,1/format,png" alt="Ganyu img">
         </div>
         <!-- Sebelah kiri (chat room)/chatbox-->
@@ -22,8 +22,8 @@
                   <div class="col-12">
                     <form method="post">
                       <div class="chat-box-tray" method="post">
-                        <input type="text" placeholder="Type your message here..."  name ="chatform">
-                        <input class= "chatbutton" type="submit" id = "chatcontent">
+                        <input type="text" placeholder="Type your message here..."  name ="chatform" id="textBox">
+                        <a href = "#textBox"><button type="submit" class="btn btn-default" value ="submit">Send</button></a>
                       </div>
                     </form>
                     
@@ -38,7 +38,8 @@
   <script>
     var chat = '{{chat|tojson}}';
     chat = JSON.parse(chat);
-    updateChatBox(chat)
+    updateChatBox(chat);
+    document.getElementById('textBox').focus();
   </script>
 
 </body>
