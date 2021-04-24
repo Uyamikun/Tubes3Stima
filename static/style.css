@@ -52,6 +52,7 @@ input:focus {
   margin: 10px 30px;
   border-radius: 9px;
   position: relative;
+  display: inline-block;
 }
 .chat-bubble:after {
   content: "";
