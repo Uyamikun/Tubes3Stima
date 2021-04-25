@@ -1,1 +1,1 @@
-tanggal,task,tugas,date,hari,bulan,tahun,buat,bikin,membuat
+kuis,tubes,tucil,tugas besar,tugas kecil,uts,uas,pr,makalah

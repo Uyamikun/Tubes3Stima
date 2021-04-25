@@ -8,6 +8,8 @@ chat = [["pertama", 1], ["balesan pertama", 0]]
 arrayTugas = []
 arrayKataPenting = []
 arrayDataMatkul = []
+arrayScrapTopik = []
+bulan = []
 i = [0]
 
 #
@@ -16,8 +18,25 @@ for item in f:
     arrayTemp = item.rstrip("\n").rsplit(',')
     for item2 in arrayTemp:
         arrayDataMatkul.append(item2)
-print(arrayDataMatkul)
+f.close()
 
+f = open("scrapForTopik.txt", 'r')
+for item in f:
+    arrayTemp = item.rstrip("\n").rsplit(',')
+    for item2 in arrayTemp:
+        arrayScrapTopik.append(item2)
+f.close()
+print(arrayScrapTopik)
+
+f = open("katapenting.txt", 'r')
+print(arrayDataMatkul)
+for item in f:
+    arrayTemp = item.rstrip("\n").rsplit(',')
+    for item2 in arrayTemp:
+        arrayKataPenting.append(item2)
+f.close()
+
+bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI"]
 def booyer_moore(text, pattern):
     last = buildLast(pattern)
     n = len(text); m = len(pattern)
@@ -49,8 +68,28 @@ def balesanBot(s):
     if(re.search("masuk", s) != None):
         return "Jadwal telah dimasukkan"
     else:
-        # return cekMatakuliah(s,arrayDataMatkul)
-        return cekTanggal(s)
+        return inputTask(s)
+
+
+def inputTask(s):
+    tanggal = cekTanggal(s)
+    matkul = cekFromArray(s, arrayDataMatkul)
+    jenis = cekFromArray(s, arrayKataPenting)
+    print(jenis)
+    print(tanggal, matkul, jenis)
+    if(tanggal == "gak" or matkul == "ga ketemu" or jenis == "ga ketemu"):
+        return "perintah tidak dikenali"
+    indeksTanggal = re.search(tanggal, s).span()[0]
+    indeksMatkul = re.search(matkul, s).span()[0]
+    indeksJenis = re.search(jenis, s).span()[0]
+    indeks = min(indeksJenis, indeksMatkul, indeksTanggal)
+    buatTopik = s[indeks::]
+    print(buatTopik)
+    print(jenis)
+    topik = buatTopik.replace(jenis,'', 1).replace(matkul, '', 1).replace(tanggal, '', 1)
+    for i in arrayScrapTopik:
+        topik = topik.replace(i.lower(), '')
+    return "{} - {} - {} - {}".format(convertTanggal(tanggal), matkul, jenis, topik)
 
 def cekTanggal(s):
     regextanggal = "(([0-2][0-9]|30|31)/([0][0-9]|10|11|12)/(20[0-9][0-9]|\\b[0-9][0-9]\\b))"
@@ -69,6 +108,18 @@ def cekTanggal(s):
         else:
             return "gak"
 
+def convertTanggal(s):
+    # regextanggal4Tahun = "[0-9][0-9] .{} 20[0-9][0-9]"
+    # regextanggal2Tahun = "[0-9][0-9] .{} [0-9][0-9]"
+    komponen = s.split(" ")
+    print(komponen)
+    if(len(komponen) == 1):
+        return s
+    else:
+        return komponen[0] +"/" + "{0:02d}".format(bulan.index(komponen[1].upper()) + 1) + "/" + komponen[2][-2::] 
+
+    
+    
 
 def cekMatakuliah(s,arrayDataMatkul):
     #ambil input cek input di listMatakuliah
@@ -78,6 +129,13 @@ def cekMatakuliah(s,arrayDataMatkul):
             return "ketemu"
         else:
             found = False
+    return "ga ketemu"
+
+def cekFromArray(s, array):
+    for item in array:
+        indeks = booyer_moore(s, item)
+        if(indeks != -1):
+            return s[indeks:indeks+len(item)]
     return "ga ketemu"
 
 def createTask(tanggal,matakuliah,jenis,topik,arrayTugas):
