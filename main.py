@@ -17,6 +17,34 @@ for item in f:
     for item2 in arrayTemp:
         arrayDataMatkul.append(item2)
 print(arrayDataMatkul)
+
+def booyer_moore(text, pattern):
+    last = buildLast(pattern)
+    n = len(text); m = len(pattern)
+    i = m-1
+    if(i > n-1):
+        return -1
+    j = m-1
+    while(i <= n-1):
+        if(pattern[j].upper() == text[i].upper()):
+            if(j==0):
+                return i
+            else:
+                i -= 1
+                j -= 1
+        else:
+            location = last[ord(text[i].upper())]
+            i = i+m-min(j, 1+location)
+    return -1
+
+
+def buildLast(pattern):
+    last = [-1 for i in range(128)]
+    for i in range(len(pattern)):
+        last[ord(pattern[i].upper())] = i
+    return last
+
+
 def balesanBot(s):
     if(re.search("masuk", s) != None):
         return "Jadwal telah dimasukkan"
@@ -41,22 +69,6 @@ def cekTanggal(s):
         else:
             return "gak"
 
-# def cekContoh(s):
-#     regex1 = "([0-2][0-9]|30|31)"
-#     regex2 = "(([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember)"
-#     regex3 = "([0-9]{2}|[0-9]{4})"
-#     x = re.findall(regex1, s)
-#     y = re.findall(regex2, s)
-#     z = re.findall(regex3, s)
-#     print(x,y,z)
-#     if(len(x)==1):
-#         return x[0]
-#     elif(len(y)==1):
-#         return y[0][0]
-#     elif(len(z)==1):
-#         return z[0]
-#     else:
-#         return "gak"
 
 def cekMatakuliah(s,arrayDataMatkul):
     #ambil input cek input di listMatakuliah
@@ -67,6 +79,7 @@ def cekMatakuliah(s,arrayDataMatkul):
         else:
             found = False
     return "ga ketemu"
+
 def createTask(tanggal,matakuliah,jenis,topik,arrayTugas):
     tempTask = [tanggal,matakuliah,jenis,topik]
     arrayTugas.append(tempTask)
