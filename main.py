@@ -7,54 +7,48 @@ arrayTugas = []
 arrayKataPenting = []
 arrayDataMatkul = []
 arrayScrapTopik = []
-bulan = []
+arrayPrintTask = []
+bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI"]
 i = [0]
 
+#readfile masukkin ke array
+def readFile(filename,array):
+    f = open("database/"+ filename , 'r')
+    for item in f:
+        arrayTemp = item.rstrip("\n").rsplit(',')
+        for item2 in arrayTemp:
+            array.append(item2)
+    f.close()
 # baca konten penting
-f = open("database/dataMataKuliah.txt",'r')
-for item in f:
-    arrayTemp = item.rstrip("\n").rsplit(',')
-    for item2 in arrayTemp:
-        arrayDataMatkul.append(item2)
-f.close()
+readFile("dataMataKuliah.txt",arrayDataMatkul)
+readFile("katapenting.txt",arrayKataPenting)
+readFile("kataPentingPrintTask.txt",arrayPrintTask)
+readFile("scrapForTopik.txt",arrayScrapTopik)
 
-f = open("database/scrapForTopik.txt", 'r')
-for item in f:
-    arrayTemp = item.rstrip("\n").rsplit(',')
-    for item2 in arrayTemp:
-        arrayScrapTopik.append(item2)
-f.close()
-#print(arrayScrapTopik)
-
-f = open("database/katapenting.txt", 'r')
-#print(arrayDataMatkul)
-for item in f:
-    arrayTemp = item.rstrip("\n").rsplit(',')
-    for item2 in arrayTemp:
-        arrayKataPenting.append(item2)
-f.close()
-
-bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI"]
-
-def balesanBot(s):
-    if(re.search("masuk", s) != None):
-        return "Jadwal telah dimasukkan"
-    else:
-        temp = inputTask(s)
-        if(temp != ""):
+def balesanBot(s):        
+    #inputTask
+    temp = inputTask(s)
+    if(temp != ""):
             return temp
-        elif(checkTask(s) != ""):
-            return checkTask(s)
-        else:
-            #inputan kosong print arrayTugas yang tersimpan(temporary)
-            return printAllTask(arrayTugas)
+    elif(checkTask(s) != ""):
+        return checkTask(s)
+    else:
+        temp = checkPrintTask(s,arrayTugas,arrayPrintTask)
+        return temp
+            
+    #printTask
+    
+    #....
+    # if(re.search("masuk", s) != None):
+    #     return "Jadwal telah dimasukkan"
+    # else:
             
 
 # fungsi untuk bot, yang paling utama adalah fungsi balesan bot, sisanya fungsi pendukung
 def booyer_moore(text, pattern):
     text = text.lower()
     pattern = pattern.lower()
-    print(pattern, " | ", text)
+    #print(pattern, " | ", text)
     last = buildLast(pattern)
     n = len(text); m = len(pattern)
     i = m-1
@@ -75,21 +69,19 @@ def booyer_moore(text, pattern):
             j = m-1
     return -1
 
-
 def buildLast(pattern):
-    print(pattern, len(pattern))
+    #print(pattern, len(pattern))
     last = [-1 for i in range(128)]
     for i in range(len(pattern)):
         last[ord(pattern[i])] = i
     return last
 
-
 def inputTask(s):
     tanggal = cekTanggal(s)
     matkul = cekFromArray(s, arrayDataMatkul)
     jenis = cekFromArray(s, arrayKataPenting)
-    print(jenis)
-    print(tanggal, matkul, jenis)
+    #print(jenis)
+    #print(tanggal, matkul, jenis)
     if(tanggal == "gak" or matkul == "ga ketemu" or jenis == "ga ketemu"):
         return ""
     indeksTanggal = re.search(tanggal, s).span()[0]
@@ -97,8 +89,8 @@ def inputTask(s):
     indeksJenis = re.search(jenis, s).span()[0]
     indeks = min(indeksJenis, indeksMatkul, indeksTanggal)
     buatTopik = s[indeks::]
-    print(buatTopik)
-    print(jenis)
+    #print(buatTopik)
+    #print(jenis)
     topik = buatTopik.replace(jenis,'', 1).replace(matkul, '', 1).replace(tanggal, '', 1)
     topik = " ".join(topik.split())
     for i in arrayScrapTopik:
@@ -114,8 +106,8 @@ def checkTask(s):
     makalah = booyer_moore(s, " makalah")
     # tanggal = cekTanggal(s)
     matkul = cekFromArray(s, arrayDataMatkul)
-    print(s, arrayDataMatkul)
-    print(deadline, tugas+pr+makalah, matkul)
+    #print(s, arrayDataMatkul)
+    #print(deadline, tugas+pr+makalah, matkul)
     if(matkul == "ga ketemu"):
         return ""
     for i in arrayTugas:
@@ -135,13 +127,13 @@ def cekTanggal(s):
     regextanggalHuruf = "(([0-2][0-9]|30|31) (([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember) (20[0-9][0-9]|\\b[0-9][0-9]\\b))"
 
     x = re.findall(regextanggal, s)
-    print(x)
+    #print(x)
     if(len(x) == 1):
-        print(x[0][0])
+        #print(x[0][0])
         return x[0][0]
     else:
         x = re.findall(regextanggalHuruf, s)
-        print(x)
+        #print(x)
         if(len(x)==1):
             return x[0][0]
         else:
@@ -149,7 +141,7 @@ def cekTanggal(s):
 
 def convertTanggal(s):
     komponen = s.split(" ")
-    print(komponen)
+    #print(komponen)
     if(len(komponen) == 1):
         return s
     else:
@@ -163,17 +155,26 @@ def cekFromArray(s, array):
             return s[indeks:indeks+len(item)]
     return "ga ketemu"
 
+
+
+
+#Nomor 2 Print Task
+def checkPrintTask(s,arrayTugas,arrayPrintTask):
+    for item in arrayPrintTask:
+        cek = booyer_moore(s,item)
+        #print(cek)
+        if(cek != -1):
+            return printAllTask(arrayTugas)
+    return "command tidak diketahui HEHEHE"
+
 def printAllTask(arrayTugas):
     temp = "List tugas yang tersimpan :\n "
     count = 1
     for item in arrayTugas:
         temp += str(count) + ". "+item + "\n"
         count+= 1
-    print("ini temporary print")
-    print(temp)
     return temp
-    
-# def checkInputPrintTask(s):
+
 
 @app.route('/')
 def home():
@@ -185,6 +186,7 @@ def chatBot():
     pesan = request.form['chatform']
     chat.append([pesan, 1])
     chat.append([balesanBot(pesan), 0])
+    print("====== this is chat list ======")
     print(chat)
     return render_template('index.html', chat = chat)
 
