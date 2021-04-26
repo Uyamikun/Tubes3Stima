@@ -11,13 +11,11 @@ body {
   margin: 60px auto;
   background: #fff;
   padding: 0;
-  border-radius: 7px;
-  height: 700px;
+  border-radius: 7px 7px 0px 0px;
+  height: 500px;
   
 }
-/* .col-md-8{
-
-} */
+  
 /*Profile bot ganyu*/
 .ganyu-bot-image {
   height: 250px;
@@ -127,7 +125,7 @@ padding-right: 15px; */
 }
 
 .chat-panel{
-  height: 700px;
+  height: 500px;
   overflow: auto;
 }
 .chat-box-tray .form-control{
