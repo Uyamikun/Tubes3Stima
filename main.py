@@ -102,6 +102,7 @@ def inputTask(s):
     print(buatTopik)
     print(jenis)
     topik = buatTopik.replace(jenis,'', 1).replace(matkul, '', 1).replace(tanggal, '', 1)
+    topik = " ".join(topik.split())
     for i in arrayScrapTopik:
         topik = topik.replace(i.lower(), '')
     arrayTugas.append("{} - {} - {} - {}".format(convertTanggal(tanggal), matkul, jenis, topik))
