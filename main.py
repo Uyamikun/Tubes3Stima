@@ -13,14 +13,14 @@ bulan = []
 i = [0]
 
 # baca konten penting
-f = open("dataMataKuliah.txt",'r')
+f = open("database/dataMataKuliah.txt",'r')
 for item in f:
     arrayTemp = item.rstrip("\n").rsplit(',')
     for item2 in arrayTemp:
         arrayDataMatkul.append(item2)
 f.close()
 
-f = open("scrapForTopik.txt", 'r')
+f = open("database/scrapForTopik.txt", 'r')
 for item in f:
     arrayTemp = item.rstrip("\n").rsplit(',')
     for item2 in arrayTemp:
@@ -28,7 +28,7 @@ for item in f:
 f.close()
 print(arrayScrapTopik)
 
-f = open("katapenting.txt", 'r')
+f = open("database/katapenting.txt", 'r')
 print(arrayDataMatkul)
 for item in f:
     arrayTemp = item.rstrip("\n").rsplit(',')
