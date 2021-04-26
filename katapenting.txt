@@ -1,1 +1,1 @@
-kuis,tubes,tucil,tugas besar,tugas kecil,uts,uas,pr,makalah
+tugas besar,tugas kecil,makalah,tubes,tucil,kuis,uts,uas,pr

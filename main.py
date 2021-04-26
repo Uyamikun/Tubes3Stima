@@ -40,6 +40,9 @@ bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI"]
 
 # fungsi untuk bot, yang paling utama adalah fungsi balesan bot, sisanya fungsi pendukung
 def booyer_moore(text, pattern):
+    text = text.lower()
+    pattern = pattern.lower()
+    print(pattern, " | ", text)
     last = buildLast(pattern)
     n = len(text); m = len(pattern)
     i = m-1
@@ -47,22 +50,25 @@ def booyer_moore(text, pattern):
         return -1
     j = m-1
     while(i <= n-1):
-        if(pattern[j].upper() == text[i].upper()):
+        if(pattern[j] == text[i]):
             if(j==0):
                 return i
             else:
                 i -= 1
                 j -= 1
         else:
-            location = last[ord(text[i].upper())]
+            location = last[ord(text[i])]
+            print(i, j, location)
             i = i+m-min(j, 1+location)
+            j = m-1
     return -1
 
 
 def buildLast(pattern):
+    print(pattern, len(pattern))
     last = [-1 for i in range(128)]
     for i in range(len(pattern)):
-        last[ord(pattern[i].upper())] = i
+        last[ord(pattern[i])] = i
     return last
 
 
@@ -70,7 +76,14 @@ def balesanBot(s):
     if(re.search("masuk", s) != None):
         return "Jadwal telah dimasukkan"
     else:
-        return inputTask(s)
+        temp = inputTask(s)
+        if(temp != ""):
+            return temp
+        elif(checkTask(s) != ""):
+            return checkTask(s)
+        else:
+            return "perintah tidak dikenali"
+        
 
 
 def inputTask(s):
@@ -80,7 +93,7 @@ def inputTask(s):
     print(jenis)
     print(tanggal, matkul, jenis)
     if(tanggal == "gak" or matkul == "ga ketemu" or jenis == "ga ketemu"):
-        return "perintah tidak dikenali"
+        return ""
     indeksTanggal = re.search(tanggal, s).span()[0]
     indeksMatkul = re.search(matkul, s).span()[0]
     indeksJenis = re.search(jenis, s).span()[0]
@@ -94,6 +107,30 @@ def inputTask(s):
     arrayTugas.append("{} - {} - {} - {}".format(convertTanggal(tanggal), matkul, jenis, topik))
     return "Task berhasil Dicatat:\n" + "{}. ".format(len(arrayTugas)) + arrayTugas[-1]
 
+def checkTask(s):
+    # harus ada kata deadline, terus ada juga kata tugas/pr/makalah
+    deadline = booyer_moore(s, "deadline")
+    tugas = booyer_moore(s, " tugas")
+    pr = booyer_moore(s, " pr")
+    makalah = booyer_moore(s, " makalah")
+    # tanggal = cekTanggal(s)
+    matkul = cekFromArray(s, arrayDataMatkul)
+    print(s, arrayDataMatkul)
+    print(deadline, tugas+pr+makalah, matkul)
+    if(matkul == "ga ketemu"):
+        return ""
+    for i in arrayTugas:
+        perkata = i.split(" - ")
+        print(perkata)
+        if(deadline != -1 and tugas+pr+makalah != -3 and perkata[1] == matkul):
+            if(tugas != -1 and perkata[2][0:2].lower() == "tu"):
+                return perkata[0]
+            elif(pr != -1 and perkata[2].lower() == "pr"):
+                return perkata[0]
+            elif(makalah != -1 and perkata[2].lower() == "makalah"):
+                return perkata[0]
+    return ""
+        
 def cekTanggal(s):
     regextanggal = "(([0-2][0-9]|30|31)/([0][0-9]|10|11|12)/(20[0-9][0-9]|\\b[0-9][0-9]\\b))"
     regextanggalHuruf = "(([0-2][0-9]|30|31) (([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember) (20[0-9][0-9]|\\b[0-9][0-9]\\b))"
@@ -123,6 +160,7 @@ def convertTanggal(s):
 def cekFromArray(s, array):
     for item in array:
         indeks = booyer_moore(s, item)
+        print(indeks)
         if(indeks != -1):
             return s[indeks:indeks+len(item)]
     return "ga ketemu"
