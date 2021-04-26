@@ -12,7 +12,7 @@ arrayScrapTopik = []
 bulan = []
 i = [0]
 
-#
+# baca konten penting
 f = open("dataMataKuliah.txt",'r')
 for item in f:
     arrayTemp = item.rstrip("\n").rsplit(',')
@@ -37,6 +37,8 @@ for item in f:
 f.close()
 
 bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI"]
+
+# fungsi untuk bot, yang paling utama adalah fungsi balesan bot, sisanya fungsi pendukung
 def booyer_moore(text, pattern):
     last = buildLast(pattern)
     n = len(text); m = len(pattern)
@@ -89,7 +91,8 @@ def inputTask(s):
     topik = buatTopik.replace(jenis,'', 1).replace(matkul, '', 1).replace(tanggal, '', 1)
     for i in arrayScrapTopik:
         topik = topik.replace(i.lower(), '')
-    return "{} - {} - {} - {}".format(convertTanggal(tanggal), matkul, jenis, topik)
+    arrayTugas.append("{} - {} - {} - {}".format(convertTanggal(tanggal), matkul, jenis, topik))
+    return "Task berhasil Dicatat:\n" + "{}. ".format(len(arrayTugas)) + arrayTugas[-1]
 
 def cekTanggal(s):
     regextanggal = "(([0-2][0-9]|30|31)/([0][0-9]|10|11|12)/(20[0-9][0-9]|\\b[0-9][0-9]\\b))"
@@ -109,8 +112,6 @@ def cekTanggal(s):
             return "gak"
 
 def convertTanggal(s):
-    # regextanggal4Tahun = "[0-9][0-9] .{} 20[0-9][0-9]"
-    # regextanggal2Tahun = "[0-9][0-9] .{} [0-9][0-9]"
     komponen = s.split(" ")
     print(komponen)
     if(len(komponen) == 1):
@@ -118,18 +119,6 @@ def convertTanggal(s):
     else:
         return komponen[0] +"/" + "{0:02d}".format(bulan.index(komponen[1].upper()) + 1) + "/" + komponen[2][-2::] 
 
-    
-    
-
-def cekMatakuliah(s,arrayDataMatkul):
-    #ambil input cek input di listMatakuliah
-    for item in arrayDataMatkul:
-        if((re.match(s, item, re.IGNORECASE))):
-            found = True
-            return "ketemu"
-        else:
-            found = False
-    return "ga ketemu"
 
 def cekFromArray(s, array):
     for item in array:

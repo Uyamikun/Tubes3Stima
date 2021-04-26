@@ -38,7 +38,7 @@
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script><script  src="./static/script2.js"></script>
   <script>
-    var chat = '{{chat|tojson}}';
+    var chat = '{{chat|tojson}}'.replaceAll("\n", "<br>");
     chat = JSON.parse(chat);
     updateChatBox(chat);
     document.getElementById("bottom-chat").scrollIntoView();

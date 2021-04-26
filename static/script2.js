@@ -8,7 +8,8 @@ function updateChatBox(chat){
         lapis2.className += "col-md-3 offset-md-9";
         var lapis3 = document.createElement("div");
         lapis3.className += "chat-bubble chat-bubble--right";
-        var isi = document.createTextNode(chat[i][0]);
+        lapis3.innerHTML = chat[i][0];
+        // var isi = document.createTextNode(chat[i][0]);
     }
     else{
         var chatRoom = document.getElementById("chat-panel")
@@ -18,9 +19,11 @@ function updateChatBox(chat){
         lapis2.className += "col-md-3";
         var lapis3 = document.createElement("div");
         lapis3.className += "chat-bubble chat-bubble--left";
-        var isi = document.createTextNode(chat[i][0]);
+        lapis3.innerHTML = chat[i][0];
+        // var isi = document.createTextNode(chat[i][0]);
     }
-    lapis3.appendChild(isi);
+    console.log(lapis3);
+    // lapis3.appendChild(isi);
     lapis2.appendChild(lapis3);
     lapis1.appendChild(lapis2);
     chatRoom.appendChild(lapis1);
