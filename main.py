@@ -106,29 +106,26 @@ def checkTask(s):
     # harus ada kata deadline, terus ada juga kata tugas/pr/makalah
     deadline = booyer_moore(s, "deadline")
     tugas = booyer_moore(s, " tugas")
-    pr = booyer_moore(s, " pr")
     makalah = booyer_moore(s, " makalah")
     # tanggal = cekTanggal(s)
     matkul = cekFromArray(s, arrayDataMatkul)
     #print(s, arrayDataMatkul)
     #print(deadline, tugas+pr+makalah, matkul)
-    if(matkul == "ga ketemu"):
+    if(matkul == "ga ketemu" or deadline == -1 or tugas+makalah == -2):
         return ""
     for i in arrayTugas:
         perkata = i.split(" - ")
         #print(perkata)
-        if(deadline != -1 and tugas+pr+makalah != -3 and perkata[1] == matkul):
+        if(perkata[1] == matkul):
             if(tugas != -1 and perkata[2][0:2].lower() == "tu"):
-                return perkata[0]
-            elif(pr != -1 and perkata[2].lower() == "pr"):
                 return perkata[0]
             elif(makalah != -1 and perkata[2].lower() == "makalah"):
                 return perkata[0]
-    return ""
+    return "tidak ditemukan deadline yang cocok"
         
 def cekTanggal(s):
-    regextanggal = "(([0-2][0-9]|30|31)/([0][0-9]|10|11|12)/(20[0-9][0-9]|\\b[0-9][0-9]\\b))"
-    regextanggalHuruf = "(([0-2][0-9]|30|31) (([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember) (20[0-9][0-9]|\\b[0-9][0-9]\\b))"
+    regextanggal = "(([1-9]|[1-2][0-9]|30|31)/([1-9]|[0][1-9]|10|11|12)/(20[0-9][0-9]|\\b[0-9][0-9]\\b))"
+    regextanggalHuruf = "(([1-9]|[1-2][0-9]|30|31) (([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|[oO]ktober|([sS]ept|[dD]es|[nN]ov)ember) (20[0-9][0-9]|\\b[0-9][0-9]\\b))"
 
     x = re.findall(regextanggal, s)
     #print(x)
@@ -143,8 +140,8 @@ def cekTanggal(s):
         else:
             return "gak"
 def cekDuaTanggal(s):
-    regextanggal = "(([0-2][0-9]|30|31)/([0][0-9]|10|11|12)/(20[0-9][0-9]|\\b[0-9][0-9]\\b))"
-    regextanggalHuruf = "(([0-2][0-9]|30|31) (([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember) (20[0-9][0-9]|\\b[0-9][0-9]\\b))"
+    regextanggal = "(([1-9]|[1-2][0-9]|30|31)/([1-9]|[0][1-9]|10|11|12)/(20[0-9][0-9]|\\b[0-9][0-9]\\b))"
+    regextanggalHuruf = "(([1-9]|[1-2][0-9]|30|31) (([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|[oO]ktober|([sS]ept|[dD]es|[nN]ov)ember) (20[0-9][0-9]|\\b[0-9][0-9]\\b))"
 
     x = re.findall(regextanggal, s)
     #print(x)
@@ -162,9 +159,10 @@ def convertTanggal(s):
     komponen = s.split(" ")
     #print(komponen)
     if(len(komponen) == 1):
-        return s
+        komponenlagi = komponen[0].split("/")
+        return "{0:02d}".format(int(komponenlagi[0])) +"/" + "{0:02d}".format(int(komponenlagi[1])) + "/" + komponenlagi[2][-2::]
     else:
-        return komponen[0] +"/" + "{0:02d}".format(bulan.index(komponen[1].upper()) + 1) + "/" + komponen[2][-2::] 
+        return "{0:02d}".format(int(komponen[0])) +"/" + "{0:02d}".format(bulan.index(komponen[1].upper()) + 1) + "/" + komponen[2][-2::] 
 
 def cekFromArray(s, array):
     for item in array:
@@ -194,9 +192,10 @@ def selesaiTask(s):
 #Nomor 2 Print Task
 def checkPrintTask(s,arrayTugas,arrayPrintTask):
     deadline = booyer_moore(s, "deadline")
-    nodate = booyer_moore(s," sejauh")
-    nodate2 = booyer_moore(s," seluruh")
-    nodate3 = booyer_moore(s, " semua")
+    nodate = booyer_moore(s,"sejauh")
+    nodate2 = booyer_moore(s,"seluruh")
+    nodate3 = booyer_moore(s, "semua")
+    penting = cekFromArray(s, arrayKataPenting).lower()
     if(deadline != -1 and (nodate != -1 or nodate2 != -1 or nodate3 != -1)):
         return printAllTask(arrayTugas)
     if(deadline != -1):
@@ -217,20 +216,38 @@ def checkPrintTask(s,arrayTugas,arrayPrintTask):
         if(waktu == "hari ini"):
             result = getTodayTask(arrayTugas)
             temp = "List tugas yang tersimpan :\n "
-            for item in result:
-                temp += arrayTugas[item] + "\n"
-            if(temp == "List tugas yang tersimpan :\n "):
-                return "Tidak ada task"
-            return temp
+            if(penting == "ga ketemu"):
+                for item in result:
+                    temp += arrayTugas[item] + "\n"
+                if(temp == "List tugas yang tersimpan :\n "):
+                    return "Tidak ada task"
+                return temp
+            else:
+                for item in result:
+                    pecahangataukeberapa = item.split(" - ")
+                    if(pecahangataukeberapa[2].lower() == penting):
+                        temp += arrayTugas[item] + "\n"
+                if(temp == "List tugas yang tersimpan :\n "):
+                    return "Tidak ada task"
+                return temp
         elif(tanggal1 != "gak" or tanggal2 != "gak" or (waktu != "ga ketemu" and angka != "gak")):
             result = getTask(angka,tanggal1,tanggal2,arrayTugas,waktu)
         
             temp = "List tugas yang tersimpan :\n "
-            for item in result:
-                temp += arrayTugas[item] + "\n"
-            if(temp == "List tugas yang tersimpan :\n "):
-                return "Tidak ada task"
-            return temp
+            if(penting == "ga ketemu"):
+                for item in result:
+                    temp += arrayTugas[item] + "\n"
+                if(temp == "List tugas yang tersimpan :\n "):
+                    return "Tidak ada task"
+                return temp
+            else:
+                for item in result:
+                    pecahangataukeberapa = arrayTugas[item].split(" - ")
+                    if(pecahangataukeberapa[2].lower() == penting):
+                        temp += arrayTugas[item] + "\n"
+                if(temp == "List tugas yang tersimpan :\n "):
+                    return "Tidak ada task"
+                return temp
     return ""
 def getTodayTask(arrayTugas):
     result = []
@@ -293,10 +310,10 @@ def getTask(angka,tanggal1,tanggal2,arrayTugas,waktu):
     print(result)
     return result
 def cekAngka(s):
-    regexAngka = "[0-9]"
+    regexAngka = "[0-9]+"
     x = re.findall(regexAngka, s)
     if(len(x) == 1):
-        return x[0][0]
+        return x[0]
     else:
         return "gak"
 
