@@ -35,6 +35,9 @@ def balesanBot(s):
     temp = checkPrintTask(s,arrayTugas,arrayPrintTask)
     if(temp != ""):
         return temp
+    temp = undurDeadline(s, arrayTugas)
+    if(temp != ""):
+        return temp
     temp = selesaiTask(s)
     if(temp != ""):
         return temp
@@ -160,10 +163,8 @@ def selesaiTask(s):
     if(selesai != -1 and task != -1):
         task += 5
         while(task < len(s) and s[task] != " "):
-            print("element setelah task:", s[task]) 
             id = id + s[task]
             task += 1
-        print("id adalah",id)
         id = int(id)
         if(id <= len(arrayTugas) and id > 0):
             arrayTugas.pop(id-1)
@@ -188,6 +189,25 @@ def printAllTask(arrayTugas):
         count+= 1
     return temp
 
+def undurDeadline(s, array):
+    undur = booyer_moore(s, "undur")
+    task = booyer_moore(s, "task")
+    tanggal = cekTanggal(s)
+    id = ""
+    if(undur != -1 and task != -1 and tanggal != "gak"):
+        tanggal = convertTanggal(tanggal)
+        task += 5
+        while(task < len(s) and s[task] != " "):
+            print("element setelah task:", s[task]) 
+            id = id + s[task]
+            task += 1
+        id = int(id)
+        if(id <= len(arrayTugas) and id > 0):
+            pecahan = array[id-1].split(" - ", 1)
+            array[id-1] = tanggal + " - " + pecahan[1]
+            return "task dengan id {} berhasil diundur menjadi {}".format(id, tanggal)
+        return "tidak terdapat task dengan id tersebut"
+    return ""
 
 @app.route('/')
 def home():
