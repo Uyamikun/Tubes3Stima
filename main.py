@@ -9,7 +9,7 @@ arrayKataPenting = []
 arrayDataMatkul = []
 arrayScrapTopik = []
 arrayPrintTask = []
-bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI"]
+bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER","OKTOBER","NOVEMBER","DESEMBER"]
 i = [0]
 
 #readfile masukkin ke array
@@ -142,7 +142,22 @@ def cekTanggal(s):
             return x[0][0]
         else:
             return "gak"
+def cekDuaTanggal(s):
+    regextanggal = "(([0-2][0-9]|30|31)/([0][0-9]|10|11|12)/(20[0-9][0-9]|\\b[0-9][0-9]\\b))"
+    regextanggalHuruf = "(([0-2][0-9]|30|31) (([jJ]an|[fF]ebr)uari|[mM]aret|[aA]pril|[mM]ei|[jJ]uni|[jJ]uli|[aA]gustus|([sS]ept|[oO]ktob|[dD]es|[nN]ovemb)ember) (20[0-9][0-9]|\\b[0-9][0-9]\\b))"
 
+    x = re.findall(regextanggal, s)
+    #print(x)
+    if(len(x) == 2):
+        #print(x[0][0])
+        return [x[0][0],x[1][0]]
+    else:
+        x = re.findall(regextanggalHuruf, s)
+        #print(x)
+        if(len(x)==2):
+            return [x[0][0],x[1][0]]
+        else:
+            return []
 def convertTanggal(s):
     komponen = s.split(" ")
     #print(komponen)
@@ -182,31 +197,60 @@ def checkPrintTask(s,arrayTugas,arrayPrintTask):
     nodate = booyer_moore(s," sejauh")
     nodate2 = booyer_moore(s," seluruh")
     nodate3 = booyer_moore(s, " semua")
-    if(deadline != -1 and nodate != -1 and nodate2 != -1 and nodate3 != -1):
+    if(deadline != -1 and (nodate != -1 or nodate2 != -1 or nodate3 != -1)):
         return printAllTask(arrayTugas)
     if(deadline != -1):
-        tanggal1 = cekTanggal(s)
-        tanggal2 = cekTanggal(s)
-        if(tanggal1 != "gak"):
-            s.replace(tanggal1,"")
-        if(tanggal2 != "gak"):
-            s.replace(tanggal2,"")
+        arrTanggal = cekDuaTanggal(s)
+        tanggal1 = "gak"
+        tanggal2 = "gak"
+        if(arrTanggal):
+            s.replace(arrTanggal[0],"")
+            s.replace(arrTanggal[1],"")
+            tanggal1 = convertTanggal(arrTanggal[0])
+            tanggal2 = convertTanggal(arrTanggal[1])
+             
+        print("ini tanggal awal banget ====")
+        print(arrTanggal)
+        print("==========")
         angka = cekAngka(s)
         waktu = cekFromArray(s,arrayPrintTask)
-        if(waktu == "hari"):
-            isToday = booyer_moore(s,"hari ini")
-            if(isToday != -1):
-                waktu = "hari ini"
-        result = getTask(angka,tanggal1,tanggal2,arrayTugas,waktu)
- 
-        temp = "List tugas yang tersimpan :\n "
-        for item in result:
-            temp += arrayTugas[item] + "\n"
-        if(temp == "List tugas yang tersimpan :\n "):
-            return "Tidak ada task"
-        return temp
+        if(waktu == "hari ini"):
+            result = getTodayTask(arrayTugas)
+            temp = "List tugas yang tersimpan :\n "
+            for item in result:
+                temp += arrayTugas[item] + "\n"
+            if(temp == "List tugas yang tersimpan :\n "):
+                return "Tidak ada task"
+            return temp
+        elif(tanggal1 != "gak" or tanggal2 != "gak" or (waktu != "ga ketemu" and angka != "gak")):
+            result = getTask(angka,tanggal1,tanggal2,arrayTugas,waktu)
+        
+            temp = "List tugas yang tersimpan :\n "
+            for item in result:
+                temp += arrayTugas[item] + "\n"
+            if(temp == "List tugas yang tersimpan :\n "):
+                return "Tidak ada task"
+            return temp
     return ""
+def getTodayTask(arrayTugas):
+    result = []
+    arrayTanggal = []
+    cdate = date.today()
+    for item in arrayTugas:
+        arrayTempTugas = item.split(" - ")
+        itemsplit = arrayTempTugas[0].split("/")
+        if(len(itemsplit[2])== 2):
+            itemsplit[2] = "20"+ itemsplit[2]
+            makeTime = date(int(itemsplit[2]), int(itemsplit[1]),int(itemsplit[0]))
+            arrayTanggal.append(makeTime)
+    for i in range(len(arrayTanggal)):
+        if(arrayTanggal[i] == cdate):
+            result.append(i)
+    return result
 def getTask(angka,tanggal1,tanggal2,arrayTugas,waktu):
+    print("Tanggal awal=====")
+    print(tanggal1)
+    print(tanggal2)
     cdate = date.today()
     arrayTanggal = []
     result = []
@@ -215,12 +259,12 @@ def getTask(angka,tanggal1,tanggal2,arrayTugas,waktu):
         itemsplit2 = tanggal2.split("/")
         if(len(itemsplit1[2])== 2):
             itemsplit1[2] = "20"+ itemsplit1[2]
-            makeTime1 = date(int(itemsplit1[2]), int(itemsplit1[1]),int(itemsplit1[0]))
-            tanggal1 = makeTime1
+        makeTime1 = date(int(itemsplit1[2]), int(itemsplit1[1]),int(itemsplit1[0]))
+        tanggal1 = makeTime1
         if(len(itemsplit2[2])== 2):
             itemsplit2[2] = "20"+ itemsplit2[2]
-            makeTime2 = date(int(itemsplit2[2]), int(itemsplit2[1]),int(itemsplit2[0]))
-            tanggal2 = makeTime2
+        makeTime2 = date(int(itemsplit2[2]), int(itemsplit2[1]),int(itemsplit2[0]))
+        tanggal2 = makeTime2
     for item in arrayTugas:
         arrayTempTugas = item.split(" - ")
         itemsplit = arrayTempTugas[0].split("/")
@@ -229,23 +273,24 @@ def getTask(angka,tanggal1,tanggal2,arrayTugas,waktu):
             makeTime = date(int(itemsplit[2]), int(itemsplit[1]),int(itemsplit[0]))
             arrayTanggal.append(makeTime)
     #print(arrayTanggal)
-    if(waktu == "hari ini"):
-        for i in range(len(arrayTanggal)):
-            if(arrayTanggal[i] == cdate):
-                result.append(i)     
+    print(tanggal1)
+    print(tanggal2)
+    print("====ini angka====")
+    print(angka)
+    if(angka != "gak"):
+        if(waktu == "hari"):
+            nextDate = cdate + timedelta(days=int(angka))
+        elif(waktu == "minggu"):
+            nextDate = cdate + timedelta(days=int(angka)*7)
+        for item in arrayTanggal:
+            if(item >= cdate and item <= nextDate):
+                result.append(arrayTanggal.index(item))
     else:
-        if(angka != "gak"):
-            if(waktu == "hari"):
-                nextDate = cdate + timedelta(days=int(angka))
-            elif(waktu == "minggu"):
-                nextDate = cdate + timedelta(days=int(angka)*7)
-            for item in arrayTanggal:
-                if(item > cdate and item < nextDate):
-                    result.append(arrayTanggal.index(item))
-        else:
-            for item in arrayTanggal:
-                if(item > tanggal1 and item < tanggal2):
-                    result.append(arrayTanggal.index(item))
+        for item in arrayTanggal:
+            if(item >= tanggal1 and item <= tanggal2):
+                result.append(arrayTanggal.index(item))
+    print("===== result ======")
+    print(result)
     return result
 def cekAngka(s):
     regexAngka = "[0-9]"
@@ -253,13 +298,15 @@ def cekAngka(s):
     if(len(x) == 1):
         return x[0][0]
     else:
-        "gak"
+        return "gak"
 
 def checkPrintTaskJuga(s,arrayTugas,arrayPrintTask, arrayKataPenting):
     deadline = booyer_moore(s, "deadline")
 
     #bagian barunya(cek pake task)
     penting = cekFromArray(s, arrayKataPenting).lower()
+    print("INI PENTING")
+    print(penting)
     if(deadline != -1 and penting != "ga ketemu"):
         hasil = "Deadline yang anda miliki: "
         index = 1
