@@ -9,6 +9,7 @@ arrayKataPenting = []
 arrayDataMatkul = []
 arrayScrapTopik = []
 arrayPrintTask = []
+arrayHelp = []
 bulan = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER","OKTOBER","NOVEMBER","DESEMBER"]
 i = [0]
 
@@ -25,7 +26,8 @@ readFile("dataMataKuliah.txt",arrayDataMatkul)
 readFile("katapenting.txt",arrayKataPenting)
 readFile("kataPentingPrintTask.txt",arrayPrintTask)
 readFile("scrapForTopik.txt",arrayScrapTopik)
-
+readFile("kataHelp.txt",arrayHelp)
+print(arrayHelp)
 def balesanBot(s):        
     #inputTask
     temp = inputTask(s)
@@ -43,6 +45,9 @@ def balesanBot(s):
     if(temp != ""):
         return temp
     temp = checkPrintTaskJuga(s, arrayTugas, arrayPrintTask, arrayKataPenting)
+    if(temp != ""):
+        return temp
+    temp = cekHelp(s,arrayHelp)
     if(temp != ""):
         return temp
     return "Perintah tidak dikenal"
@@ -365,6 +370,18 @@ def undurDeadline(s, array):
         return "tidak terdapat task dengan id tersebut"
     return ""
 
+def cekHelp(s,arrayHelp):
+    for item in arrayHelp:
+        indeks = booyer_moore(s, item)
+        if(indeks != -1):
+            return printHelp(arrayKataPenting)
+    return ""
+
+def printHelp(arrayKataPenting):
+    temp = "[FITUR]\n1. Menambahkan task\n2. Melihat daftar task\n3. Mengubah Deadline\n\n[Kata Penting]\n"
+    for item in arrayKataPenting:
+        temp += item + "\n"
+    return temp
 @app.route('/')
 def home():
     chat.clear()
