@@ -5,7 +5,7 @@ function updateChatBox(chat){
         var lapis1 = document.createElement("div");
         lapis1.className += "row no-gutters";
         var lapis2 = document.createElement("div");
-        lapis2.className += "col-md-3 offset-md-9";
+        lapis2.className += "col-md-6 offset-md-6 mr-auto";
         var lapis3 = document.createElement("div");
         lapis3.className += "chat-bubble chat-bubble--right";
         lapis3.innerHTML = chat[i][0];
@@ -16,7 +16,7 @@ function updateChatBox(chat){
         var lapis1 = document.createElement("div");
         lapis1.className += "row no-gutters";
         var lapis2 = document.createElement("div");
-        lapis2.className += "col-md-3";
+        lapis2.className += "col-md-6";
         var lapis3 = document.createElement("div");
         lapis3.className += "chat-bubble chat-bubble--left";
         lapis3.innerHTML = chat[i][0];

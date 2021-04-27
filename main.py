@@ -384,7 +384,7 @@ def printHelp(arrayKataPenting):
     return temp
 @app.route('/')
 def home():
-    chat.clear()
+    # chat.clear()
     return render_template('index.html', chat = chat)
 
 @app.route('/',methods=['POST'])
@@ -392,6 +392,9 @@ def chatBot():
     pesan = request.form['chatform']
     chat.append([pesan, 1])
     chat.append([balesanBot(pesan), 0])
+    if(len(chat) > 100):
+        chat.pop(0)
+        chat.pop(0)
     #print("====== this is chat list ======")
     #print(chat)
     return render_template('index.html', chat = chat)
