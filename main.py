@@ -174,11 +174,15 @@ def selesaiTask(s):
 
 #Nomor 2 Print Task
 def checkPrintTask(s,arrayTugas,arrayPrintTask):
-    for item in arrayPrintTask:
-        cek = booyer_moore(s,item)
-        #print(cek)
-        if(cek != -1):
-            return printAllTask(arrayTugas)
+    deadline = booyer_moore(s, "deadline")
+    nodate = booyer_moore(s," sejauh")
+    if(deadline != -1 and nodate != -1):
+        return printAllTask(arrayTugas)
+    elif(deadline != -1 and cekFromArray(s,arrayPrintTask) != "ga ketemu"):
+        tanggal1 = cekTanggal(s)
+        s.replace(tanggal1,"")
+        tanggal2 = cekTanggal(s)
+        #if(tanggal1 != "gak" or tanggal2 != "gak"):
     return ""
 
 def printAllTask(arrayTugas):
