@@ -30,18 +30,15 @@ def balesanBot(s):
     temp = inputTask(s)
     if(temp != ""):
             return temp
-    elif(checkTask(s) != ""):
+    if(checkTask(s) != ""):
         return checkTask(s)
-    else:
-        temp = checkPrintTask(s,arrayTugas,arrayPrintTask)
+    temp = checkPrintTask(s,arrayTugas,arrayPrintTask)
+    if(temp != ""):
         return temp
-            
-    #printTask
-    
-    #....
-    # if(re.search("masuk", s) != None):
-    #     return "Jadwal telah dimasukkan"
-    # else:
+    temp = selesaiTask(s)
+    if(temp != ""):
+        return temp
+    return "Perintah tidak dikenal"
             
 
 # fungsi untuk bot, yang paling utama adalah fungsi balesan bot, sisanya fungsi pendukung
@@ -156,7 +153,23 @@ def cekFromArray(s, array):
     return "ga ketemu"
 
 
-
+def selesaiTask(s):
+    selesai = booyer_moore(s, "selesai")
+    task = booyer_moore(s, "task")
+    id = ""
+    if(selesai != -1 and task != -1):
+        task += 5
+        while(task < len(s) and s[task] != " "):
+            print("element setelah task:", s[task]) 
+            id = id + s[task]
+            task += 1
+        print("id adalah",id)
+        id = int(id)
+        if(id <= len(arrayTugas) and id > 0):
+            arrayTugas.pop(id-1)
+            return "task dengan id {} berhasil dihapuskan".format(id)
+        return "tidak terdapat task dengan id tersebut"
+    return ""
 
 #Nomor 2 Print Task
 def checkPrintTask(s,arrayTugas,arrayPrintTask):
@@ -165,7 +178,7 @@ def checkPrintTask(s,arrayTugas,arrayPrintTask):
         #print(cek)
         if(cek != -1):
             return printAllTask(arrayTugas)
-    return "command tidak diketahui HEHEHE"
+    return ""
 
 def printAllTask(arrayTugas):
     temp = "List tugas yang tersimpan :\n "
