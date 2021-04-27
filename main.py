@@ -41,6 +41,9 @@ def balesanBot(s):
     temp = selesaiTask(s)
     if(temp != ""):
         return temp
+    temp = checkPrintTaskJuga(s, arrayTugas, arrayPrintTask, arrayKataPenting)
+    if(temp != ""):
+        return temp
     return "Perintah tidak dikenal"
             
 
@@ -183,6 +186,24 @@ def checkPrintTask(s,arrayTugas,arrayPrintTask):
         s.replace(tanggal1,"")
         tanggal2 = cekTanggal(s)
         #if(tanggal1 != "gak" or tanggal2 != "gak"):
+    return ""
+
+def checkPrintTaskJuga(s,arrayTugas,arrayPrintTask, arrayKataPenting):
+    deadline = booyer_moore(s, "deadline")
+
+    #bagian barunya(cek pake task)
+    penting = cekFromArray(s, arrayKataPenting).lower()
+    if(deadline != -1 and penting != "ga ketemu"):
+        hasil = "Deadline yang anda miliki: "
+        index = 1
+        for item in arrayTugas:
+            pecahan = item.split( ' - ')
+            if(pecahan[2].lower() == penting.lower()):
+                hasil += "\n" + str(index) + ". " + item
+                index += 1
+        if(hasil == "Deadline yang anda miliki: "):
+            return "tidak ada deadline yang memenuhi"
+        return hasil
     return ""
 
 def printAllTask(arrayTugas):
