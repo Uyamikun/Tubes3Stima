@@ -112,6 +112,11 @@ padding-right: 15px; */
   color: #fff;
 }
 
+.offset-md-8 .chat-bubble {
+  background: #212529;
+  color: #fff;
+}
+
 .offset-md-6 .chat-bubble {
   background: #212529;
   color: #fff;
