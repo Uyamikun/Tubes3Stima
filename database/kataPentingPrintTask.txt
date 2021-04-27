@@ -1,1 +1,1 @@
-sejauh,ke depan,minggu,hari,antara
+minggu,hari,hari ini

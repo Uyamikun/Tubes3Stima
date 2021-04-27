@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
+from datetime import date,datetime,timedelta
 import re
 app = Flask(__name__)
 
@@ -179,14 +180,80 @@ def selesaiTask(s):
 def checkPrintTask(s,arrayTugas,arrayPrintTask):
     deadline = booyer_moore(s, "deadline")
     nodate = booyer_moore(s," sejauh")
-    if(deadline != -1 and nodate != -1):
+    nodate2 = booyer_moore(s," seluruh")
+    nodate3 = booyer_moore(s, " semua")
+    if(deadline != -1 and nodate != -1 and nodate2 != -1 and nodate3 != -1):
         return printAllTask(arrayTugas)
-    elif(deadline != -1 and cekFromArray(s,arrayPrintTask) != "ga ketemu"):
+    if(deadline != -1):
         tanggal1 = cekTanggal(s)
-        s.replace(tanggal1,"")
         tanggal2 = cekTanggal(s)
-        #if(tanggal1 != "gak" or tanggal2 != "gak"):
+        if(tanggal1 != "gak"):
+            s.replace(tanggal1,"")
+        if(tanggal2 != "gak"):
+            s.replace(tanggal2,"")
+        angka = cekAngka(s)
+        waktu = cekFromArray(s,arrayPrintTask)
+        if(waktu == "hari"):
+            isToday = booyer_moore(s,"hari ini")
+            if(isToday != -1):
+                waktu = "hari ini"
+        result = getTask(angka,tanggal1,tanggal2,arrayTugas,waktu)
+ 
+        temp = "List tugas yang tersimpan :\n "
+        for item in result:
+            temp += arrayTugas[item] + "\n"
+        if(temp == "List tugas yang tersimpan :\n "):
+            return "Tidak ada task"
+        return temp
     return ""
+def getTask(angka,tanggal1,tanggal2,arrayTugas,waktu):
+    cdate = date.today()
+    arrayTanggal = []
+    result = []
+    if(tanggal1 != "gak" and tanggal2 != "gak"):
+        itemsplit1 = tanggal1.split("/")
+        itemsplit2 = tanggal2.split("/")
+        if(len(itemsplit1[2])== 2):
+            itemsplit1[2] = "20"+ itemsplit1[2]
+            makeTime1 = date(int(itemsplit1[2]), int(itemsplit1[1]),int(itemsplit1[0]))
+            tanggal1 = makeTime1
+        if(len(itemsplit2[2])== 2):
+            itemsplit2[2] = "20"+ itemsplit2[2]
+            makeTime2 = date(int(itemsplit2[2]), int(itemsplit2[1]),int(itemsplit2[0]))
+            tanggal2 = makeTime2
+    for item in arrayTugas:
+        arrayTempTugas = item.split(" - ")
+        itemsplit = arrayTempTugas[0].split("/")
+        if(len(itemsplit[2])== 2):
+            itemsplit[2] = "20"+ itemsplit[2]
+            makeTime = date(int(itemsplit[2]), int(itemsplit[1]),int(itemsplit[0]))
+            arrayTanggal.append(makeTime)
+    #print(arrayTanggal)
+    if(waktu == "hari ini"):
+        for i in range(len(arrayTanggal)):
+            if(arrayTanggal[i] == cdate):
+                result.append(i)     
+    else:
+        if(angka != "gak"):
+            if(waktu == "hari"):
+                nextDate = cdate + timedelta(days=int(angka))
+            elif(waktu == "minggu"):
+                nextDate = cdate + timedelta(days=int(angka)*7)
+            for item in arrayTanggal:
+                if(item > cdate and item < nextDate):
+                    result.append(arrayTanggal.index(item))
+        else:
+            for item in arrayTanggal:
+                if(item > tanggal1 and item < tanggal2):
+                    result.append(arrayTanggal.index(item))
+    return result
+def cekAngka(s):
+    regexAngka = "[0-9]"
+    x = re.findall(regexAngka, s)
+    if(len(x) == 1):
+        return x[0][0]
+    else:
+        "gak"
 
 def checkPrintTaskJuga(s,arrayTugas,arrayPrintTask, arrayKataPenting):
     deadline = booyer_moore(s, "deadline")
@@ -244,8 +311,8 @@ def chatBot():
     pesan = request.form['chatform']
     chat.append([pesan, 1])
     chat.append([balesanBot(pesan), 0])
-    print("====== this is chat list ======")
-    print(chat)
+    #print("====== this is chat list ======")
+    #print(chat)
     return render_template('index.html', chat = chat)
 
 
