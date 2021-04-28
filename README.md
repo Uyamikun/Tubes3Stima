@@ -7,6 +7,7 @@ Tugas besar 3 strategi algoritma chatbot with regular expression
 First time deploy:
 
 ```
+cd src
 pip install virtualenv
 virtualenv env
 .\env\Scripts\activate
@@ -16,10 +17,15 @@ python main.py
 
 second time onward:
 ```
+cd src
 .\env\Scripts\activate
 python main.py
 ```
-
+atau jika sudah berada di folder src:
+```
+.\env\Scripts\activate
+python main.py
+```
 ## Built With
 
 * [Flask](https://flask.palletsprojects.com/en/1.1.x/) - The web framework used
