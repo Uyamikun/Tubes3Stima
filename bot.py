@@ -384,7 +384,9 @@ def cekHelp(s,arrayHelp):
     return ""
 
 def printHelp(arrayKataPenting):
-    temp = "[FITUR]\n1. Menambahkan task\n2. Melihat daftar task\n3. Mengubah Deadline\n\n[Kata Penting]\n"
+    temp = "[FITUR]\n1. Menambahkan Task\n2. Melihat Daftar Task\n3. Melihat Deadline Task\n4. Mengubah Deadline\n5. Menghapus Deadline\n\n[Kata Penting]\n"
+    id = 1
     for item in arrayKataPenting:
-        temp += item + "\n"
+        temp += str(id) + ". " + item + "\n"
+        id += 1
     return temp

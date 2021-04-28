@@ -15,7 +15,7 @@ body {
   height: 500px;
   
 }
-  
+
 /*Profile bot ganyu*/
 .ganyu-bot-image {
   height: 250px;
@@ -54,7 +54,8 @@ input:focus {
   margin: 10px 30px;
   border-radius: 9px;
   position: relative;
-  /* display: inline-block; */
+  display: inline-block;
+  /* text-align: right; */
 }
 .chat-bubble:after {
   content: "";
@@ -79,6 +80,7 @@ input:focus {
   border-left-color: #212529;
   border-right: 0;
   margin-right: -20px;
+  text-align: left;
 }
 
 /* clear: both;
